@@ -10,8 +10,6 @@ public class Main {
 
         boolean programRunning = true;
 
-
-
         int [][]articles;
         int noOfArticles=0;
         int articleNumber=1000;
