@@ -8,25 +8,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean programRunning = true;
-
         int[][] articles;
-        int noOfArticles = 0;
-        int articleNumber = 1000;
+        int noOfArticles;
+        int articleNumber;
 
+        boolean programRunning;
+
+
+        articleNumber = 1000;
         articles = new int[10][3];
+        programRunning=true;
 
-        //Setting intial values of articles array to "0"
-        /*for (int i = 0; i < 10; i++) {
-            articles[i][0] = 0;
-
-        }
-        for (int i = 0; i < 10; i++) {
-            articles[i][1] = 0;
-        }
-        for (int i = 0; i < 10; i++) {
-            articles[i][2] = 0;
-        }*/
 
         do {
 
@@ -34,8 +26,14 @@ public class Main {
                 case 1:
                     System.out.print("Ange antal artiklar att lägga in: ");
                     noOfArticles=input();
-                    articles = insertArticles(articles, articleNumber, noOfArticles);
-                    articleNumber += noOfArticles;
+                    if(noOfArticles >= 1) {
+                        articles = insertArticles(articles, articleNumber, noOfArticles);
+                        articleNumber += noOfArticles;
+                    }
+                    else {
+                        System.out.println("Felaktig inmatning");
+                        System.out.println();
+                    }
                     break;
                 case 2:
                     removeArticle(articles);
@@ -90,10 +88,13 @@ public class Main {
 
         do {
             input = userInput.nextLine();
+            System.out.println();
 
             try {
-                inputInt = Integer.parseInt(input);
+
+                inputInt = Math.abs(Integer.parseInt(input));
                 isRunning = false;
+
             } catch (Exception e) {
                 System.out.println("Felaktig inmatning");
             }
@@ -124,6 +125,7 @@ public class Main {
             noOfArticles--;
         }
         System.out.println(articlesPrint + " Artiklar Inlagda!");
+        System.out.println();
 
         return articles;
     }
@@ -170,28 +172,49 @@ public class Main {
         }
 
         System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
+        System.out.println();
     }
 
     public static void printArticles(int[][] articles) {
 
+        int tempArticleNumberColumn;
+        int tempAmountColumn;
+        int tempPriceColumn;
+
         System.out.println("Artnr\t\tAntal\t\tPris");
+
+        //sorting by ascending articlenumber
         for (int i = 0; i < articles.length; i++) {
+            for (int j = i + 1; j < articles.length; j++) {
+                if (articles[i][0] > articles[j][0]) {
+                    tempArticleNumberColumn = articles[i][0];
+                    articles[i][0] = articles[j][0];
+                    articles[j][0] = tempArticleNumberColumn;
 
-            //ifstatement to correct intendention if value is 0
-            if (articles[i][0] == 0 && articles[i][1] == 0 && articles[i][2] == 0) {
-                System.out.println(articles[i][0] + "\t\t\t" + articles[i][1] + "\t\t\t" + articles[i][2]);
-            } else {
+                    tempAmountColumn = articles[i][1];
+                    articles[i][1] = articles[j][1];
+                    articles[j][1] = tempAmountColumn;
+
+                    tempPriceColumn = articles[i][2];
+                    articles[i][2] = articles[j][2];
+                    articles[j][2] = tempPriceColumn;
+                }
+            }
+        } //end of sorting
+
+            //prints articlenumber, amount and price
+        for (int i = 0; i < articles.length; i++) {
+            if(articles[i][0]!=0) {
                 System.out.println(articles[i][0] + "\t\t" + articles[i][1] + "\t\t\t" + articles[i][2]);
-
             }
         }
+        System.out.println();
     }
 
-    /*
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles) {
 
     }
-
+    /*
     public static void printSales(int[][]sales, Date[] salesDate) {
 
     }
