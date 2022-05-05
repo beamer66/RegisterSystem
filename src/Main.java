@@ -210,10 +210,10 @@ public class Main {
         }
         System.out.println();
     }
-
+    /*
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles) {
 
-    }
+    }/*
     /*
     public static void printSales(int[][]sales, Date[] salesDate) {
 
