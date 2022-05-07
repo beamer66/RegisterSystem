@@ -8,22 +8,28 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int[][] articles;
         int noOfArticles;
         int articleNumber;
+        int[][] articles;
+        int[][] sales;
+
+        Date salesDate[];
+        salesDate = new Date[0];
 
         boolean programRunning;
 
-
         articleNumber = 1000;
         articles = new int[10][3];
+        sales = new int[100][3];
         programRunning=true;
 
 
         do {
 
             switch (menu()) {
+                //Lägg till artiklar
                 case 1:
+                    System.out.println("\t==LÄGG TILL ARTIKLAR==");
                     System.out.print("Ange antal artiklar att lägga in: ");
                     noOfArticles=input();
                     if(noOfArticles >= 1) {
@@ -35,24 +41,34 @@ public class Main {
                         System.out.println();
                     }
                     break;
+                //Ta bort artiklar
                 case 2:
+                    printArticles(articles);
+                    System.out.println("\t==TA BORT ARTIKLAR==");
                     removeArticle(articles);
                     break;
+                //Visa artiklar
                 case 3:
+                    System.out.println("\t==VISA ARTIKLAR==");
                     printArticles(articles);
                     break;
+                //Försäljning
                 case 4:
-                    //System.out.println("4. Försäljning");
-                    //System.out.println("");
+                    printArticles(articles);
+                    System.out.println("\t==FÖRSÄLJNING==");
+                    sellArticle(sales, salesDate, articles);
                     break;
+                //Orderhistorik
                 case 5:
-                    //System.out.println("5. Orderhistorik");
-                    //System.out.println("");
+                    System.out.println("\t==ORDERHISTORIK==");
+                    printSales(sales, salesDate);
                     break;
+                //Sorterad orderhistoriktabell
                 case 6:
-                    //System.out.println("6. Sortera orderhistoriktabell");
-                    //System.out.println("");
+                    System.out.println("\t==SORTERAD ORDERHISTORIKTABELL==");
+                    sortedTable(sales, salesDate);
                     break;
+                //Avsluta programmet
                 case 7:
                     programRunning = false;
                     break;
@@ -64,6 +80,7 @@ public class Main {
         } while (programRunning);
     } // end of mainmethod
 
+    //Method which displays the menu and returns the input
     public static int menu() {
 
         System.out.println("1. Lägg in artiklar");
@@ -78,6 +95,7 @@ public class Main {
         return input();
     }
 
+    //Method for user input
     public static int input() {
 
         int inputInt = 0;
@@ -96,7 +114,7 @@ public class Main {
                 isRunning = false;
 
             } catch (Exception e) {
-                System.out.println("Felaktig inmatning");
+                System.out.println("Felaktig inmatning, försök igen");
             }
         } while (isRunning);
 
@@ -157,22 +175,35 @@ public class Main {
     public static void removeArticle(int[][] articles) {
 
         int articleNumber;
+        int articleNumberToRemove;
+        int endRun;
+        articleNumberToRemove=-1;
+        endRun=0;
 
-        System.out.print("Ange artikelnummer: ");
+        do {
+            System.out.print("Ange artikelnummer som ska tas bort: ");
 
-        articleNumber = input();
+            articleNumber = input();
 
-        for (int i = 0; i < articles.length; i++) {
-
-            if (articles[i][0] == articleNumber) {
-                articles[i][0] = 0;
-                articles[i][1] = 0;
-                articles[i][2] = 0;
+            for (int i = 0; i < articles.length; i++) {
+                if (articles[i][0] == articleNumber) {
+                    articleNumberToRemove = i;
+                }
             }
-        }
+            if (articleNumberToRemove == -1) {
+                System.out.println("Artikelnummer finns ej");
+                System.out.println();
+            }
 
-        System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
-        System.out.println();
+            else {
+                articles[articleNumberToRemove][0] = 0;
+                articles[articleNumberToRemove][1] = 0;
+                articles[articleNumberToRemove][2] = 0;
+                endRun++;
+                System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
+                System.out.println();
+            }
+        }while(endRun<1);
     }
 
     public static void printArticles(int[][] articles) {
@@ -210,18 +241,108 @@ public class Main {
         }
         System.out.println();
     }
-    /*
+    /*fixa så att man vid felaktig inläsning få ett nytt försök att skriva in istället för att bli tillbaka kastad
+    till menyn */
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles) {
 
-    }/*
-    /*
-    public static void printSales(int[][]sales, Date[] salesDate) {
+        int amountToSell;
+        int articleNumber;
+        int articleNumberToSell;
 
+
+        articleNumberToSell=-1;
+
+        System.out.print("Ange artikelnummer på varan som ska säljas: ");
+        articleNumber=input();
+
+        for(int i = 0; i < articles.length; i++) {
+            if (articles[i][0] == articleNumber) {
+                articleNumberToSell = i;
+            }
+        }
+
+        if (articleNumberToSell==-1) {
+            System.out.println("Artikelnummer finns ej");
+            System.out.println();
+        }
+
+        else {
+            System.out.print("Hur många artiklar ska säljas?: ");
+            amountToSell = input();
+
+            if (articles[articleNumberToSell][1] >= amountToSell) {
+                articles[articleNumberToSell][1] = articles[articleNumberToSell][1] - amountToSell;
+
+                for (int i = 0; i < sales.length; i++) {
+                    if (sales[i][0]==0) {
+                        sales[i][0] = articles[articleNumberToSell][0];
+                        sales[i][1] = amountToSell;
+                        sales[i][2] = articles[articleNumberToSell][2];
+                        break;
+                    }
+                }
+
+                System.out.println(amountToSell + " Artiklar sålda till priset av " + articles[articleNumberToSell][2] + ":- per styck");
+                System.out.println();
+            }
+
+            else {
+                System.out.println("Finns ej tillräckligt med artiklar");
+                System.out.println();
+            }
+
+        }
+    }
+
+    public static void printSales(int[][]sales, Date[] salesDate) {
+        System.out.println("Artnr\t\tAntal\t\tPris");
+        for(int i = 0; i < sales.length; i++) {
+            if (sales[i][0]!=0)
+            System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2]);
+
+        }
+        System.out.println();
     }
 
     public static void sortedTable(int[][]sales,  Date[] salesDate) {
 
-    }
-    */
+        int tempArticleNumberColumn;
+        int tempAmountColumn;
+        int tempPriceColumn;
+        int [][]sortedSales;
+        sortedSales = new int[100][3];
 
-}
+        for (int i = 0; i < sales.length; i++) {
+                    System.arraycopy(sales[i], 0, sortedSales[i], 0, sales[i].length);
+                }
+
+        System.out.println("Artnr\t\tAntal\t\tPris");
+
+        //sorting by ascending articlenumber
+        for (int i = 0; i < sortedSales.length; i++) {
+            for (int j = i + 1; j < sortedSales.length; j++) {
+                if (sortedSales[i][0] > sortedSales[j][0]) {
+                    tempArticleNumberColumn = sortedSales[i][0];
+                    sortedSales[i][0] = sortedSales[j][0];
+                    sortedSales[j][0] = tempArticleNumberColumn;
+
+                    tempAmountColumn = sortedSales[i][1];
+                    sortedSales[i][1] = sortedSales[j][1];
+                    sortedSales[j][1] = tempAmountColumn;
+
+                    tempPriceColumn = sortedSales[i][2];
+                    sortedSales[i][2] = sortedSales[j][2];
+                    sortedSales[j][2] = tempPriceColumn;
+                }
+            }
+        } //end of sorting
+
+        for(int i = 0; i < sortedSales.length; i++) {
+            if (sortedSales[i][0] != 0)
+                System.out.println(sortedSales[i][0] + "\t\t" + sortedSales[i][1] + "\t\t\t" + sortedSales[i][2]);
+        }
+        System.out.println();
+    }
+
+
+} //end of class
