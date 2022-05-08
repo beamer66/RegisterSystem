@@ -99,7 +99,9 @@ public class Main {
     //Method for user input
     public static int input() {
 
-        int inputInt = 0;
+        int inputInt;
+
+        inputInt = 0;
 
         String input;
 
@@ -122,7 +124,7 @@ public class Main {
         return inputInt;
     }
 
-
+    //A method which adds desiered number of articles from user input and then calling the checkFull method and then returns articles
     public static int[][] insertArticles(int[][] articles, int articleNumber, int noOfArticles) {
 
         int articlesPrint;
@@ -193,6 +195,7 @@ public class Main {
         int articleNumber;
         int articleNumberToRemove;
         int endRun;
+
         articleNumberToRemove=-1;
         endRun=0;
 
@@ -325,7 +328,9 @@ public class Main {
     }
 
     public static void printSales(int[][]sales, Date[] salesDate) {
+
         System.out.println("Artnr\t\tAntal\t\tPris");
+
         for(int i = 0; i < sales.length; i++) {
             if (sales[i][0]!=0)
             System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2] + "\t\t" + salesDate[i]);
@@ -340,6 +345,13 @@ public class Main {
         int tempAmountColumn;
         int tempPriceColumn;
         int [][]sortedSales;
+
+        Date[] sortedDate;
+        Date[] tempdate;
+
+        tempdate = new Date[salesDate.length];
+
+        sortedDate = salesDate;
         sortedSales = new int[sales.length][3];
 
         for (int i = 0; i < sales.length; i++) {
@@ -356,6 +368,10 @@ public class Main {
                     sortedSales[i][0] = sortedSales[j][0];
                     sortedSales[j][0] = tempArticleNumberColumn;
 
+                    tempdate[i] = sortedDate[i];
+                    sortedDate[i] = sortedDate[j];
+                    sortedDate[j] = tempdate[i];
+
                     tempAmountColumn = sortedSales[i][1];
                     sortedSales[i][1] = sortedSales[j][1];
                     sortedSales[j][1] = tempAmountColumn;
@@ -369,7 +385,7 @@ public class Main {
 
         for(int i = 0; i < sortedSales.length; i++) {
             if (sortedSales[i][0] != 0)
-                System.out.println(sortedSales[i][0] + "\t\t" + sortedSales[i][1] + "\t\t\t" + sortedSales[i][2] + "\t\t" + salesDate[i]);
+                System.out.println(sortedSales[i][0] + "\t\t" + sortedSales[i][1] + "\t\t\t" + sortedSales[i][2] + "\t\t" + sortedDate[i]);
         }
         System.out.println();
     }
