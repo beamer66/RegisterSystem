@@ -1,4 +1,6 @@
-/*A program which works as a simple cashregister. the user can add and remove articles show articles that have been added. user can also sell articles and view sales history with time stamps of time and date of the sale. the sales history can also be sorted by ascending articlenumber*/
+/*A program which works as a simple cashregister. the user can add and remove articles show articles that have been added.
+user can also sell articles and view sales history with time stamps of time and date of the sale.
+the sales history can also be sorted by ascending articlenumber*/
 
 import java.util.Scanner;
 import java.util.Date;
