@@ -241,57 +241,78 @@ public class Main {
         }
         System.out.println();
     }
-    /*fixa så att man vid felaktig inläsning få ett nytt försök att skriva in istället för att bli tillbaka kastad
-    till menyn */
+
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles) {
 
         int amountToSell;
         int articleNumber;
         int articleNumberToSell;
+        int [][]tempSales;
+
+        boolean getArticle = false;
+        boolean getAmount = false;
 
 
         articleNumberToSell=-1;
 
-        System.out.print("Ange artikelnummer på varan som ska säljas: ");
-        articleNumber=input();
+        //to see if the articlenumber entered exists, lets user try again if it dont
+        do {
+            System.out.print("Ange artikelnummer på varan som ska säljas: ");
+            articleNumber = input();
 
-        for(int i = 0; i < articles.length; i++) {
-            if (articles[i][0] == articleNumber) {
-                articleNumberToSell = i;
+            for (int i = 0; i < articles.length; i++) {
+                if (articles[i][0] == articleNumber) {
+                    articleNumberToSell = i;
+                }
             }
-        }
+            if (articleNumberToSell == -1) {
+                System.out.println("Artikelnummer finns ej");
+                System.out.println();
+            }
+            else if (articles[articleNumberToSell][1]==0) {
+                System.out.println("Det finns inga artiklar att sälja");
+            }
+            else
+                getArticle = true;
 
-        if (articleNumberToSell==-1) {
-            System.out.println("Artikelnummer finns ej");
-            System.out.println();
-        }
+        } while (!getArticle);
 
-        else {
+        //to see if there are enough articles, lets user try again if it dont
+        do {
             System.out.print("Hur många artiklar ska säljas?: ");
             amountToSell = input();
 
-            if (articles[articleNumberToSell][1] >= amountToSell) {
-                articles[articleNumberToSell][1] = articles[articleNumberToSell][1] - amountToSell;
-
-                for (int i = 0; i < sales.length; i++) {
-                    if (sales[i][0]==0) {
-                        sales[i][0] = articles[articleNumberToSell][0];
-                        sales[i][1] = amountToSell;
-                        sales[i][2] = articles[articleNumberToSell][2];
-                        break;
-                    }
-                }
-
-                System.out.println(amountToSell + " Artiklar sålda till priset av " + articles[articleNumberToSell][2] + ":- per styck");
-                System.out.println();
-            }
-
-            else {
+            if (articles[articleNumberToSell][1] < amountToSell) {
                 System.out.println("Finns ej tillräckligt med artiklar");
                 System.out.println();
             }
 
+            else
+                getAmount = true;
+
+        } while (!getAmount);
+
+        articles[articleNumberToSell][1] = articles[articleNumberToSell][1] - amountToSell;
+
+        /*tempSales = new int[(sales.length + 1)][3];
+
+        for (int i = 0; i < sales.length; i++) {
+            System.arraycopy(sales[i], 0, tempSales[i], 0, sales[i].length);
         }
+        sales = tempSales;*/
+
+        for (int i = 0; i < sales.length; i++) {
+            if (sales[i][0]==0) {
+                sales[i][0] = articles[articleNumberToSell][0];
+                sales[i][1] = amountToSell;
+                sales[i][2] = articles[articleNumberToSell][2];
+                break;
+            }
+        }
+
+        System.out.println(amountToSell + " Artiklar sålda till priset av " + articles[articleNumberToSell][2] + ":- per styck");
+        System.out.println();
+
     }
 
     public static void printSales(int[][]sales, Date[] salesDate) {
