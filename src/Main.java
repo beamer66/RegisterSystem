@@ -1,3 +1,5 @@
+/*A program which works as a simple cashregister. the user can add and remove articles show articles that have been added. user can also sell articles and view sales history with time stamps of time and date of the sale. the sales history can also be sorted by ascending articlenumber*/
+
 import java.util.Scanner;
 import java.util.Date;
 
@@ -172,7 +174,7 @@ public class Main {
         for (int i = 0; i < articles.length; i++) {
             System.arraycopy(articles[i], 0, tempArticles[i], 0, articles[i].length);
         }
-            articles = tempArticles;
+        articles = tempArticles;
 
         return articles;
     }
@@ -224,24 +226,27 @@ public class Main {
 
             articleNumber = input();
 
-            for (int i = 0; i < articles.length; i++) {
-                if (articles[i][0] == articleNumber) {
-                    articleNumberToRemove = i;
+            if (articleNumber > 0) {
+                for (int i = 0; i < articles.length; i++) {
+                    if (articles[i][0] == articleNumber) {
+                        articleNumberToRemove = i;
+                    }
+                }
+                if (articleNumberToRemove == -1) {
+                    System.out.println("Artikelnummer finns ej");
+                    System.out.println();
+                } else {
+                    articles[articleNumberToRemove][0] = 0;
+                    articles[articleNumberToRemove][1] = 0;
+                    articles[articleNumberToRemove][2] = 0;
+                    endRun++;
+                    System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
+                    System.out.println();
                 }
             }
-            if (articleNumberToRemove == -1) {
+            else
                 System.out.println("Artikelnummer finns ej");
-                System.out.println();
-            }
-
-            else {
-                articles[articleNumberToRemove][0] = 0;
-                articles[articleNumberToRemove][1] = 0;
-                articles[articleNumberToRemove][2] = 0;
-                endRun++;
-                System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
-                System.out.println();
-            }
+            System.out.println();
         }while(endRun<1); //end of do while loop
     }
 
@@ -273,7 +278,7 @@ public class Main {
             }
         } //end of sorting
 
-            //prints articlenumber, amount and price
+        //prints articlenumber, amount and price
         for (int i = 0; i < articles.length; i++) {
             if(articles[i][0]!=0) {
                 System.out.println(articles[i][0] + "\t\t" + articles[i][1] + "\t\t\t" + articles[i][2]);
@@ -299,36 +304,41 @@ public class Main {
         do {
             System.out.print("Ange artikelnummer på varan som ska säljas: ");
             articleNumber = input();
-
-            for (int i = 0; i < articles.length; i++) {
-                if (articles[i][0] == articleNumber) {
-                    articleNumberToSell = i;
-                }
-            }
-            if (articleNumberToSell == -1) {
+            if (articleNumber < 1000) {
                 System.out.println("Artikelnummer finns ej");
-                System.out.println();
             }
-            else if (articles[articleNumberToSell][1]==0) {
-                System.out.println("Det finns inga artiklar att sälja");
+            else {
+                for (int i = 0; i < articles.length; i++) {
+                    if (articles[i][0] == articleNumber) {
+                        articleNumberToSell = i;
+                    }
+                }
+                if (articleNumberToSell == -1) {
+                    System.out.println("Artikelnummer finns ej");
+                    System.out.println();
+                } else if (articles[articleNumberToSell][1] == 0) {
+                    System.out.println("Det finns inga artiklar att sälja");
+                } else
+                    getArticle = true;
             }
-            else
-                getArticle = true;
-
         } while (!getArticle);
 
         //to see if there are enough articles, lets user try again if it dont
         do {
             System.out.print("Hur många artiklar ska säljas?: ");
             amountToSell = input();
-
-            if (articles[articleNumberToSell][1] < amountToSell) {
-                System.out.println("Finns ej tillräckligt med artiklar");
+            if (amountToSell>1) {
+                if (articles[articleNumberToSell][1] < amountToSell) {
+                    System.out.println("Finns ej tillräckligt med artiklar");
+                    System.out.println();
+                }
+                else
+                    getAmount = true;
+            }
+            else {
+                System.out.println("Kan inte sälja 0st");
                 System.out.println();
             }
-
-            else
-                getAmount = true;
 
         } while (!getAmount);
 
@@ -358,7 +368,7 @@ public class Main {
 
         for(int i = 0; i < sales.length; i++) {
             if (sales[i][0]!=0)
-            System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2] + "\t\t" + salesDate[i]);
+                System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2] + "\t\t" + salesDate[i]);
 
         }
         System.out.println();
@@ -381,8 +391,8 @@ public class Main {
         sortedSales = new int[sales.length][3];
 
         for (int i = 0; i < sales.length; i++) {
-                    System.arraycopy(sales[i], 0, sortedSales[i], 0, sales[i].length);
-                }
+            System.arraycopy(sales[i], 0, sortedSales[i], 0, sales[i].length);
+        }
 
         System.out.println("Artnr\t\tAntal\t\tPris");
 
