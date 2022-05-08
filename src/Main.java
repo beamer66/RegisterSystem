@@ -14,20 +14,20 @@ public class Main {
         int[][] sales;
 
         Date[] salesDate;
-        salesDate = new Date[100];
 
         boolean programRunning;
 
         articleNumber = 1000;
         articles = new int[10][3];
+        salesDate = new Date[0];
         sales = new int[0][3];
         programRunning=true;
 
-
+        // Do while loop which lets the user choose any of the options 1-7 until option 7 which terminates the program is chosen
         do {
 
             switch (menu()) {
-                //Lägg till artiklar
+                //Add articles
                 case 1:
                     System.out.println("\t==LÄGG TILL ARTIKLAR==");
                     System.out.print("Ange antal artiklar att lägga in: ");
@@ -41,35 +41,36 @@ public class Main {
                         System.out.println();
                     }
                     break;
-                //Ta bort artiklar
+                //Remove articles
                 case 2:
                     printArticles(articles);
                     System.out.println("\t==TA BORT ARTIKLAR==");
                     removeArticle(articles);
                     break;
-                //Visa artiklar
+                //Show articles
                 case 3:
                     System.out.println("\t==VISA ARTIKLAR==");
                     printArticles(articles);
                     break;
-                //Försäljning
+                //Sales
                 case 4:
                     printArticles(articles);
                     System.out.println("\t==FÖRSÄLJNING==");
-                    sales=insertSale(sales);
+                    salesDate=insertDate(salesDate); //adds 1 index to the salesDate array
+                    sales=insertSale(sales); //adds 1 index to the sales 2D-array
                     sellArticle(sales, salesDate, articles);
                     break;
-                //Orderhistorik
+                //Order history
                 case 5:
                     System.out.println("\t==ORDERHISTORIK==");
                     printSales(sales, salesDate);
                     break;
-                //Sorterad orderhistoriktabell
+                //Sorted order history
                 case 6:
                     System.out.println("\t==SORTERAD ORDERHISTORIKTABELL==");
                     sortedTable(sales, salesDate);
                     break;
-                //Avsluta programmet
+                //Terminate program
                 case 7:
                     programRunning = false;
                     break;
@@ -124,7 +125,7 @@ public class Main {
         return inputInt;
     }
 
-    //A method which adds desiered number of articles from user input and then calling the checkFull method and then returns articles
+    //Method which adds desiered number of articles from user input and then calling the checkFull method and then returns the new value
     public static int[][] insertArticles(int[][] articles, int articleNumber, int noOfArticles) {
 
         int articlesPrint;
@@ -151,6 +152,7 @@ public class Main {
         return articles;
     }
 
+    //Method which checks if the articles 2d-array is full and adds missing slots and returns the new value
     public static int[][] checkFull(int[][] articles, int noOfArticles) {
 
         int[][] tempArticles;
@@ -175,6 +177,7 @@ public class Main {
         return articles;
     }
 
+    //Method which adds an index to the sales 2d-array and returns the new value
     public static int[][] insertSale(int[][]sales) {
 
         int [][]tempSales;
@@ -190,6 +193,22 @@ public class Main {
 
     }
 
+    //Method which adds an index to the date array and returns the new value
+    public static Date [] insertDate(Date[] salesDate) {
+        Date []tempDate;
+
+        tempDate = new Date[salesDate.length+1];
+
+        for (int i = 0; i < salesDate.length; i++) {
+            System.arraycopy(salesDate, 0, tempDate, 0, salesDate.length);
+        }
+        salesDate = tempDate;
+
+        return salesDate;
+
+    }
+
+    //Method which removes an article including amount and price from users input
     public static void removeArticle(int[][] articles) {
 
         int articleNumber;
@@ -199,6 +218,7 @@ public class Main {
         articleNumberToRemove=-1;
         endRun=0;
 
+        //Do while loop which allows user to enter article number again if entered number doesnt exist
         do {
             System.out.print("Ange artikelnummer som ska tas bort: ");
 
@@ -222,9 +242,10 @@ public class Main {
                 System.out.println("Artikelnummer " + articleNumber + " Borttaget!");
                 System.out.println();
             }
-        }while(endRun<1);
+        }while(endRun<1); //end of do while loop
     }
 
+    //Method which prints the articles and sorting by ascending article number
     public static void printArticles(int[][] articles) {
 
         int tempArticleNumberColumn;
@@ -261,6 +282,7 @@ public class Main {
         System.out.println();
     }
 
+    //Method used for selling an article from user input also adding data to sale
     public static void sellArticle(int[][]sales, Date[] salesDate, int[][]articles) {
 
         int amountToSell;
@@ -310,8 +332,10 @@ public class Main {
 
         } while (!getAmount);
 
+        //removing amount from the article
         articles[articleNumberToSell][1] = articles[articleNumberToSell][1] - amountToSell;
 
+        //adding to sale
         for (int i = 0; i < sales.length; i++) {
             if (sales[i][0]==0) {
                 sales[i][0] = articles[articleNumberToSell][0];
@@ -327,6 +351,7 @@ public class Main {
 
     }
 
+    //a method which prints the sales to the user with date and time of the sale
     public static void printSales(int[][]sales, Date[] salesDate) {
 
         System.out.println("Artnr\t\tAntal\t\tPris");
@@ -339,6 +364,7 @@ public class Main {
         System.out.println();
     }
 
+    //Method which sorts the sales by ascending article number prints the sales to the user with date and time
     public static void sortedTable(int[][]sales,  Date[] salesDate) {
 
         int tempArticleNumberColumn;
