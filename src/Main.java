@@ -13,14 +13,14 @@ public class Main {
         int[][] articles;
         int[][] sales;
 
-        Date salesDate[];
-        salesDate = new Date[0];
+        Date[] salesDate;
+        salesDate = new Date[100];
 
         boolean programRunning;
 
         articleNumber = 1000;
         articles = new int[10][3];
-        sales = new int[100][3];
+        sales = new int[0][3];
         programRunning=true;
 
 
@@ -56,6 +56,7 @@ public class Main {
                 case 4:
                     printArticles(articles);
                     System.out.println("\t==FÖRSÄLJNING==");
+                    sales=insertSale(sales);
                     sellArticle(sales, salesDate, articles);
                     break;
                 //Orderhistorik
@@ -172,6 +173,21 @@ public class Main {
         return articles;
     }
 
+    public static int[][] insertSale(int[][]sales) {
+
+        int [][]tempSales;
+
+        tempSales = new int[sales.length+1][3];
+
+        for (int i = 0; i < sales.length; i++) {
+            System.arraycopy(sales[i], 0, tempSales[i], 0, sales[i].length);
+        }
+        sales = tempSales;
+
+        return sales;
+
+    }
+
     public static void removeArticle(int[][] articles) {
 
         int articleNumber;
@@ -247,7 +263,6 @@ public class Main {
         int amountToSell;
         int articleNumber;
         int articleNumberToSell;
-        int [][]tempSales;
 
         boolean getArticle = false;
         boolean getAmount = false;
@@ -294,18 +309,12 @@ public class Main {
 
         articles[articleNumberToSell][1] = articles[articleNumberToSell][1] - amountToSell;
 
-        /*tempSales = new int[(sales.length + 1)][3];
-
-        for (int i = 0; i < sales.length; i++) {
-            System.arraycopy(sales[i], 0, tempSales[i], 0, sales[i].length);
-        }
-        sales = tempSales;*/
-
         for (int i = 0; i < sales.length; i++) {
             if (sales[i][0]==0) {
                 sales[i][0] = articles[articleNumberToSell][0];
                 sales[i][1] = amountToSell;
                 sales[i][2] = articles[articleNumberToSell][2];
+                salesDate[i] = new Date();
                 break;
             }
         }
@@ -319,7 +328,7 @@ public class Main {
         System.out.println("Artnr\t\tAntal\t\tPris");
         for(int i = 0; i < sales.length; i++) {
             if (sales[i][0]!=0)
-            System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2]);
+            System.out.println(sales[i][0] + "\t\t" + sales[i][1] + "\t\t\t" + sales[i][2] + "\t\t" + salesDate[i]);
 
         }
         System.out.println();
@@ -331,7 +340,7 @@ public class Main {
         int tempAmountColumn;
         int tempPriceColumn;
         int [][]sortedSales;
-        sortedSales = new int[100][3];
+        sortedSales = new int[sales.length][3];
 
         for (int i = 0; i < sales.length; i++) {
                     System.arraycopy(sales[i], 0, sortedSales[i], 0, sales[i].length);
@@ -360,7 +369,7 @@ public class Main {
 
         for(int i = 0; i < sortedSales.length; i++) {
             if (sortedSales[i][0] != 0)
-                System.out.println(sortedSales[i][0] + "\t\t" + sortedSales[i][1] + "\t\t\t" + sortedSales[i][2]);
+                System.out.println(sortedSales[i][0] + "\t\t" + sortedSales[i][1] + "\t\t\t" + sortedSales[i][2] + "\t\t" + salesDate[i]);
         }
         System.out.println();
     }
